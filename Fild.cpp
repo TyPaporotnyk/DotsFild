@@ -21,16 +21,16 @@ void Fild::printDots(sf::RenderWindow &window)
             if(this->fild[i][j] >= 1 && this->fild[i][j] <= 5)
             {
                 circle.setFillColor(sf::Color::Black);
-                circle.setPosition(lenFild * ((j + 1)),
-                                   lenFild * ((i + 1)));
+                circle.setPosition((lenFild * ((j + 1)) - lenFild),
+                                   (lenFild * ((i + 1)) - lenFild));
                 
                 window.draw(circle);
             }
             else if(this->fild[i][j] == 9)
             {
                 circle.setFillColor(sf::Color::Red);
-                circle.setPosition(lenFild * ((j + 1)),
-                                   lenFild * ((i + 1)));
+                circle.setPosition((lenFild * ((j + 1)) - lenFild),
+                                   (lenFild * ((i + 1)) - lenFild));
                 
                 window.draw(circle);
             }
