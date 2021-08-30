@@ -10,8 +10,6 @@
 #define Fild_H
 
 #include <SFML/Graphics.hpp>
-#include <ctime>
-#include <iostream>
 
 #define FILD_LEN 50
 
@@ -21,22 +19,11 @@ private:
     int lenFild;
     
 public:
-    Fild(int len)
-    {
-        lenFild = len / FILD_LEN;
-        
-        srand(time(NULL));
-        for(int i = 0; i < FILD_LEN; i++)
-        {
-            for(int j = 0; j < FILD_LEN; j++)
-            {
-                fild[i][j] = rand() % 10;
-            }
-        }
-    }
+    explicit Fild(int len);
     
     void printDots(sf::RenderWindow &window);
-    
+    void newGenerate();
+    void setDot(sf::RenderWindow &window, int x, int y);
     [[deprecated]] void printFild();
     
 };
