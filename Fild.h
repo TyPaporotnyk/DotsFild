@@ -24,6 +24,7 @@ public:
     void printDots(sf::RenderWindow &window);
     void newGenerate();
     void setDot(sf::RenderWindow &window, int x, int y);
+    void newLife();
     [[deprecated]] void printFild();
     
 };
