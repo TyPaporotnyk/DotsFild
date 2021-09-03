@@ -15,22 +15,26 @@
 
 void Fild::printDots(sf::RenderWindow &window)
 {
-    sf::RectangleShape shape(sf::Vector2f(lenFild, lenFild));
-    
     int subLen = lenFild / 2;
+    sf::RectangleShape shape(sf::Vector2f(lenFild, lenFild));
     
     for(int i = 0; i < FILD_LEN; i++)
     {
         for(int j = 0; j < FILD_LEN; j++)
         {
-            if(fild[i][j] == 1)
+            shape.setPosition((lenFild * ((j + 1)) - lenFild),
+                               (lenFild * ((i + 1)) - lenFild));
+            
+            if(oldFild[i][j] == 1)
             {
                 shape.setFillColor(sf::Color::Black);
-                shape.setPosition((lenFild * ((j + 1)) - lenFild),
-                                   (lenFild * ((i + 1)) - lenFild));
-                
-                window.draw(shape);
+               
             }
+            else {
+                shape.setFillColor(sf::Color::White);
+            }
+            
+            window.draw(shape);
         }
     }
 }
@@ -52,6 +56,14 @@ void Fild::newLife()
     {
         for(int j = 0; j < FILD_LEN; j++)
         {
+            oldFild[i][j] = fild[i][j];
+        }
+    }
+    
+    for(int i = 0; i < FILD_LEN; i++)
+    {
+        for(int j = 0; j < FILD_LEN; j++)
+        {
             int points = 0;
             
             for(int di = -1; di <= 1; di++)
@@ -59,16 +71,16 @@ void Fild::newLife()
                 for(int dj = -1; dj <= 1; dj++)
                 {
                     if(di == 0 && dj == 0) continue;
-                    if(fild[i + di][j + dj] == 1) points++;
+                    if(oldFild[i + di][j + dj] == 1) points++;
                 }
             }
             
-            if(fild[i][j] == 0 && points == 3)
+            if(oldFild[i][j] == 0 && points == 3)
             {
                 fild[i][j] = 1;
             }
             
-            else if(fild[i][j] == 1 && (points >= 2 && points <= 3))
+            else if(oldFild[i][j] == 1 && (points >= 2 && points <= 3))
             {
                 continue;
             }
@@ -80,18 +92,15 @@ void Fild::newLife()
     }
 }
 
-void Fild::setDot(sf::RenderWindow &window, int mouseX, int mouseY)
+void Fild::setDot(int mouseX, int mouseY)
 {
-    sf::RectangleShape shape(sf::Vector2f(lenFild, lenFild));
-    shape.setFillColor(sf::Color::Black);
-    
     int dotX = mouseX / lenFild;
     int dotY = mouseY / lenFild;
     
 #ifdef TEST
     std::cout << "X -> " << mouseX << "; Y -> " << mouseY << std::endl;
     std::cout << "dX -> " << dotX << "; dY -> " << dotY << std::endl;
-    std::cout << fild[dotX][dotY] << std::endl;
+    std::cout << oldFild[dotX][dotY] << std::endl;
 #endif
     
     if(fild[dotY][dotX] == 0)
@@ -114,7 +123,6 @@ Fild::Fild(int len)
     
     srand(time(NULL));
     newGenerate();
-    
 #ifdef TEST
     printFild();
 #endif
@@ -131,4 +139,3 @@ void Fild::printFild()
         std::cout << std::endl;
     }
 }
-

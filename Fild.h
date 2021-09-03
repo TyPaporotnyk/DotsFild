@@ -11,11 +11,12 @@
 
 #include <SFML/Graphics.hpp>
 
-#define FILD_LEN 50
+#define FILD_LEN 100
 
 class Fild{
 private:
-    int fild[FILD_LEN][FILD_LEN];
+    int fild[FILD_LEN][FILD_LEN] = {};
+    int oldFild[FILD_LEN][FILD_LEN] = {};
     int lenFild;
     
 public:
@@ -23,7 +24,7 @@ public:
     
     void printDots(sf::RenderWindow &window);
     void newGenerate();
-    void setDot(sf::RenderWindow &window, int x, int y);
+    void setDot(int x, int y);
     void newLife();
     [[deprecated]] void printFild();
     
