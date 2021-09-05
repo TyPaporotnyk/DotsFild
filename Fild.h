@@ -11,7 +11,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#define FILD_LEN 100
+#define FILD_LEN 50
 
 class Fild{
 private:
@@ -25,7 +25,7 @@ public:
     void printDots(sf::RenderWindow &window);
     void newGenerate();
     void setDot(int x, int y);
-    void newLife();
+    void newLife(int &age, int &colony);
     [[deprecated]] void printFild();
     
 };

@@ -11,7 +11,7 @@
 #include <ctime>
 #include <iostream>
 
-#define TEST
+// #define TEST
 
 void Fild::printDots(sf::RenderWindow &window)
 {
@@ -22,8 +22,12 @@ void Fild::printDots(sf::RenderWindow &window)
     {
         for(int j = 0; j < FILD_LEN; j++)
         {
+            sf::Color color(37, 37, 37);
+            
             shape.setPosition((lenFild * ((j + 1)) - lenFild),
                                (lenFild * ((i + 1)) - lenFild));
+            shape.setOutlineColor(color);
+            shape.setOutlineThickness(0.5f);
             
             if(oldFild[i][j] == 1)
             {
@@ -50,8 +54,10 @@ void Fild::newGenerate()
     }
 }
 
-void Fild::newLife()
+void Fild::newLife(int &age, int &colony)
 {
+    colony = 0;
+    
     for(int i = 0; i < FILD_LEN; i++)
     {
         for(int j = 0; j < FILD_LEN; j++)
@@ -78,10 +84,12 @@ void Fild::newLife()
             if(oldFild[i][j] == 0 && points == 3)
             {
                 fild[i][j] = 1;
+                colony++;
             }
             
             else if(oldFild[i][j] == 1 && (points >= 2 && points <= 3))
             {
+                colony++;
                 continue;
             }
             else
@@ -90,6 +98,7 @@ void Fild::newLife()
             }
         }
     }
+    age++;
 }
 
 void Fild::setDot(int mouseX, int mouseY)
@@ -113,7 +122,7 @@ void Fild::setDot(int mouseX, int mouseY)
     }
     
 #ifdef TEST
-//  std::cout << fild[dotX][dotY] << std::endl;
+    std::cout << fild[dotX][dotY] << std::endl;
 #endif
 }
 
