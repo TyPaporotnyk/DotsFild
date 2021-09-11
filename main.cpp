@@ -7,53 +7,142 @@ using std::endl;
 #define WIDTH 1980
 #define HEIGHT 1280
 
-#define RANDOM_RANGE 2
+#define RANDOM_RANGE 3
 
 #define SQUARE_RADIUS 20
 
-int **fild;
-int **oldFild;
+int **field;
+int **oldField;
+
+
 
 int quanHorElements;
 int quanWertElements;
 
+bool run = true;
 int age = 0;
 int colony = 0;
+int speed = 10;
 
-void initFild()
+void initField();
+void swapField();
+void printField(sf::RenderWindow &window);
+void newAge();
+void clearField();
+void newGenerate();
+
+int main()
+{
+    cout << "To stop the game pres \"SPACE\"" << endl;
+    cout << "To clear the field pres \"C\"" << endl;
+    cout << "To generate new field pres \"N\"" << endl;
+
+    initField();
+
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game life");
+    window.setFramerateLimit(speed);
+
+    while(window.isOpen())
+    {
+        sf::Event event;
+        while(window.pollEvent(event))
+        {
+            if(event.type == sf::Event::Closed) window.close();
+            else if(event.type == sf::Event::KeyPressed)
+            {
+                if(event.key.code == sf::Keyboard::Space) run = !run;
+                else if(event.key.code == sf::Keyboard::N) newGenerate();
+                else if(event.key.code == sf::Keyboard::C) clearField();
+            }
+            else if(event.type == sf::Keyboard::RBracket)
+            {
+                speed++;
+                window.setFramerateLimit(speed);
+            }
+            else if( event.type == sf::Event::MouseButtonPressed)
+            {
+                int oldMousePosI = 0;
+                int oldMmousePosJ = 0;
+
+                sf::Vector2<int> mousePos = sf::Mouse::getPosition(window);
+
+                    int mousePosI = mousePos.y / SQUARE_RADIUS;
+                    int mousePosJ = mousePos.x / SQUARE_RADIUS;
+
+                    if(field[mousePosI][mousePosJ] == 0) field[mousePosI][mousePosJ] = 1;
+                    else if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
+
+                    cout << mousePosI << "  " << mousePosJ << endl;
+            }
+        }
+
+        window.clear(sf::Color::White);
+
+        if(run) newAge();
+
+        printField(window);
+
+        window.display();
+    }
+
+    return 0;
+}
+
+void clearField()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            field[i][j] = 0;
+        }
+    }
+}
+
+void newGenerate()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
+        }
+    }
+}
+
+void initField()
 {
     quanWertElements = WIDTH / SQUARE_RADIUS;
     quanHorElements = HEIGHT / SQUARE_RADIUS;
 
-    fild = new int*[quanHorElements];
-    oldFild = new int*[quanHorElements];
+    field = new int*[quanHorElements];
+    oldField = new int*[quanHorElements];
 
     for(int i = 0; i < quanHorElements; i++)
     {
-        fild[i] = new int[quanWertElements];
-        oldFild[i] = new int[quanWertElements];
+        field[i] = new int[quanWertElements];
+        oldField[i] = new int[quanWertElements];
 
         for(int j = 0; j < quanWertElements; j++)
         {
-            fild[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
-            oldFild[i][j] = 0;
+            field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
+            oldField[i][j] = 0;
         }
     }
 }
 
-void swapFild()
+void swapField()
 {
     for(int i = 0; i < quanHorElements; i++)
     {
         for(int j = 0; j < quanWertElements; j++)
         {
-            oldFild[i][j] = fild[i][j];
-            //fild[i][j] = 0;
+            oldField[i][j] = field[i][j];
         }
     }
 }
 
-void printFild(sf::RenderWindow &window)
+void printField(sf::RenderWindow &window)
 {
     sf::RectangleShape square(sf::Vector2f(SQUARE_RADIUS, SQUARE_RADIUS));
     square.setFillColor(sf::Color::White);
@@ -67,7 +156,8 @@ void printFild(sf::RenderWindow &window)
             square.setPosition(SQUARE_RADIUS * j + (WIDTH % SQUARE_RADIUS) / 2,
                                SQUARE_RADIUS * i + (HEIGHT % SQUARE_RADIUS) / 2);
 
-            if(oldFild[i][j] == 1) square.setFillColor(sf::Color::Black);
+            if(oldField[i][j] == 1 && run) square.setFillColor(sf::Color::Black);
+            else if(field[i][j] == 1 && !run) square.setFillColor(sf::Color::Black);
             else square.setFillColor(sf::Color::White);
 
             window.draw(square);
@@ -77,7 +167,7 @@ void printFild(sf::RenderWindow &window)
 
 void newAge()
 {
-    swapFild();
+    swapField();
     for(int i = 0; i < quanHorElements; i++)
     {
         for(int j = 0; j < quanWertElements; j++)
@@ -102,24 +192,24 @@ void newAge()
                     if(posJ == quanWertElements) posJ = 0;
                     else if(posJ == -1) posJ = quanWertElements - 1;
 
-                    if(oldFild[posI][posJ] == 1) points++;
+                    if(oldField[posI][posJ] == 1) points++;
                 }
             }
 
-            if(oldFild[i][j] == 0 && points == 3)
+            if(oldField[i][j] == 0 && points == 3)
             {
-                fild[i][j] = 1;
+                field[i][j] = 1;
                 colony++;
             }
 
-            else if(oldFild[i][j] == 1 && (points >= 2 && points <= 3))
+            else if(oldField[i][j] == 1 && (points >= 2 && points <= 3))
             {
                 colony++;
                 continue;
             }
             else
             {
-                fild[i][j] = 0;
+                field[i][j] = 0;
             }
         }
     }
@@ -127,35 +217,3 @@ void newAge()
     age++;
 }
 
-int main()
-{
-    bool run = true;
-
-    initFild();
-
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game life");
-
-    window.setFramerateLimit(10);
-    while(window.isOpen())
-    {
-        sf::Event event;
-        while(window.pollEvent(event))
-        {
-            if(event.type == sf::Event::Closed) window.close();
-            else if( event.type == sf::Event::KeyPressed)
-            {
-                if(event.key.code == sf::Keyboard::Space) run = !run;
-            }
-        }
-
-        window.clear(sf::Color::White);
-
-        if(run) newAge();
-
-        printFild(window);
-
-        window.display();
-    }
-
-    return 0;
-}
