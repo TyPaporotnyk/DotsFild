@@ -9,6 +9,7 @@ This program was created for testing skils and new programming language
 *To clear the field pres "C"<br/>
 *To generate new field pres "N"<br/>
 
+## Tasks
 - [x] Show Fild
 - [x] Generate new age
 - [x] Control
