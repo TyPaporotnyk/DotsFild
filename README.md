@@ -1,4 +1,6 @@
 # Game Life
+[Daniil Svadkovsky](https://github.com/TyPaporotnyk)
+
 
 ## Control
 *To pause pres "SPACE" <br/>
