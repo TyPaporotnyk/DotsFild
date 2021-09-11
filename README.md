@@ -1,7 +1,7 @@
 # Game Life
 This program was created for testing skils and new programming language
 
-@[Daniil Svadkovsky](https://github.com/TyPaporotnyk)
+[@Daniil Svadkovsky](https://github.com/TyPaporotnyk)
 
 
 ## Control
