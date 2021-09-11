@@ -1,100 +1,161 @@
-
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 #include <iostream>
-#include <fstream>
 
-#include "Fild.h"
+using std::cout;
+using std::endl;
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 1200
+#define WIDTH 1980
+#define HEIGHT 1280
 
-#define PATH_TO_FILE "/Users/daniil/Desktop/SimleGame/SimleGame/evolution.txt"
-#define PATH_TO_FONT_FILE "/Users/daniil/Desktop/SimleGame/SimleGame/Font/arial.ttf"
+#define RANDOM_RANGE 2
 
-//void fontInit(sf::Font &font);
+#define SQUARE_RADIUS 20
 
-int main(){
-    bool run = true;
-    bool write = true;
-    int colony = 0;
-    int age = 0;
-    
-    std::ofstream writeToFile(PATH_TO_FILE, std::ios::out | std::ios::trunc);
-    if(!writeToFile.is_open()) write = false;
-    // Window
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Game Life");
-    window.setFramerateLimit(10);
-    
-    // Init
-    // Font
-//    sf::Font font;
-//    fontInit(font);
-//
-//    sf::Text colonyText("Colony: " + colony, font, 50);
-//    sf::Text ageText("Age: " + age, font, 50);
-//
-//    colonyText.setFillColor(sf::Color::Black);
-//    ageText.setFillColor(sf::Color::Black);
+int **fild;
+int **oldFild;
 
-    //Fild
-    Fild *fild = new Fild(SCREEN_WIDTH);
-    
-    
-    while(window.isOpen())
+int quanHorElements;
+int quanWertElements;
+
+int age = 0;
+int colony = 0;
+
+void initFild()
+{
+    quanWertElements = WIDTH / SQUARE_RADIUS;
+    quanHorElements = HEIGHT / SQUARE_RADIUS;
+
+    fild = new int*[quanHorElements];
+    oldFild = new int*[quanHorElements];
+
+    for(int i = 0; i < quanHorElements; i++)
     {
-        // Clear
-        if(run) window.clear(sf::Color::White);
-        
-        sf::Event event;
-        
-        // Logic
-        if(run) fild->newLife(age, colony);
-        
-        while(window.pollEvent(event))
+        fild[i] = new int[quanWertElements];
+        oldFild[i] = new int[quanWertElements];
+
+        for(int j = 0; j < quanWertElements; j++)
         {
-            if(event.type == sf::Event::Closed)
-                window.close();
-
-            if(event.type == sf::Event::MouseButtonPressed){
-                sf::Vector2i vector = sf::Mouse::getPosition(window);
-
-                fild->setDot(vector.x, vector.y);
-            }
-            
-            if(event.type == sf::Event::KeyPressed){
-                run = !run;
-            }
-            
+            fild[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
+            oldFild[i][j] = 0;
         }
-        
-        // Print
-        fild->printDots(window);
-        
-        // Draw text
-        if(run && write) writeToFile << age << "    " << colony << "\n";
-//        ageText.setString("Age: " + age);
-//
-//        window.draw(ageText);
-//        window.draw(colonyText);
-        
-        // Display
-        window.display();
     }
-    
-    writeToFile.close();
-    
-    delete fild;
-    
-    return 0;
 }
 
-void fontInit(sf::Font &font)
+void swapFild()
 {
-    if(!font.loadFromFile(PATH_TO_FONT_FILE))
+    for(int i = 0; i < quanHorElements; i++)
     {
-        std::cout << "Font not Loaded!" << std::endl;
-        return -1;
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            oldFild[i][j] = fild[i][j];
+            //fild[i][j] = 0;
+        }
     }
-    std::cout << "Load sucsesful!" << std::endl;
+}
+
+void printFild(sf::RenderWindow &window)
+{
+    sf::RectangleShape square(sf::Vector2f(SQUARE_RADIUS, SQUARE_RADIUS));
+    square.setFillColor(sf::Color::White);
+    square.setOutlineColor(sf::Color::Black);
+    square.setOutlineThickness(1);
+
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            square.setPosition(SQUARE_RADIUS * j + (WIDTH % SQUARE_RADIUS) / 2,
+                               SQUARE_RADIUS * i + (HEIGHT % SQUARE_RADIUS) / 2);
+
+            if(oldFild[i][j] == 1) square.setFillColor(sf::Color::Black);
+            else square.setFillColor(sf::Color::White);
+
+            window.draw(square);
+        }
+    }
+}
+
+void newAge()
+{
+    swapFild();
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            int points = 0;
+
+            for(int di = -1; di <= 1; di++)
+            {
+                for(int dj = -1; dj <= 1; dj++)
+                {
+
+                    int posI = 0;
+                    int posJ = 0;
+
+                    if(di == 0 && dj == 0) continue;
+
+                    posI = i + di;
+                    if(posI == quanHorElements) posI = 0;
+                    else if(posI == -1) posI = quanHorElements - 1;
+
+                    posJ = j + dj;
+                    if(posJ == quanWertElements) posJ = 0;
+                    else if(posJ == -1) posJ = quanWertElements - 1;
+
+                    if(oldFild[posI][posJ] == 1) points++;
+                }
+            }
+
+            if(oldFild[i][j] == 0 && points == 3)
+            {
+                fild[i][j] = 1;
+                colony++;
+            }
+
+            else if(oldFild[i][j] == 1 && (points >= 2 && points <= 3))
+            {
+                colony++;
+                continue;
+            }
+            else
+            {
+                fild[i][j] = 0;
+            }
+        }
+    }
+
+    age++;
+}
+
+int main()
+{
+    bool run = true;
+
+    initFild();
+
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Game life");
+
+    window.setFramerateLimit(10);
+    while(window.isOpen())
+    {
+        sf::Event event;
+        while(window.pollEvent(event))
+        {
+            if(event.type == sf::Event::Closed) window.close();
+            else if( event.type == sf::Event::KeyPressed)
+            {
+                if(event.key.code == sf::Keyboard::Space) run = !run;
+            }
+        }
+
+        window.clear(sf::Color::White);
+
+        if(run) newAge();
+
+        printFild(window);
+
+        window.display();
+    }
+
+    return 0;
 }
