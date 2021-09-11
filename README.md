@@ -1,5 +1,7 @@
 # Game Life
-[Daniil Svadkovsky](https://github.com/TyPaporotnyk)
+This program was created for testing skils and new programming language
+
+@[Daniil Svadkovsky](https://github.com/TyPaporotnyk)
 
 
 ## Control
@@ -7,7 +9,8 @@
 *To clear the field pres "C"<br/>
 *To generate new field pres "N"<br/>
 
-- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
-- [x] list syntax required (any unordered or ordered list supported)
-- [x] this is a complete item
-- [ ] Hello
+- [x] Show Fild
+- [x] Generate new age
+- [x] Control
+- [x] Responsive screen
+- [ ] Displaying ages and colony
