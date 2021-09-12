@@ -7,14 +7,12 @@ using std::endl;
 #define WIDTH 1980
 #define HEIGHT 1280
 
-#define RANDOM_RANGE 3
+#define RANDOM_RANGE 4
 
 #define SQUARE_RADIUS 20
 
 int **field;
 int **oldField;
-
-
 
 int quanHorElements;
 int quanWertElements;
@@ -22,7 +20,7 @@ int quanWertElements;
 bool run = true;
 int age = 0;
 int colony = 0;
-int speed = 10;
+int speed = 20;
 
 void initField();
 void swapField();
@@ -53,26 +51,31 @@ int main()
                 if(event.key.code == sf::Keyboard::Space) run = !run;
                 else if(event.key.code == sf::Keyboard::N) newGenerate();
                 else if(event.key.code == sf::Keyboard::C) clearField();
+                else if(event.key.code == sf::Keyboard::LBracket && speed > 2)
+                {
+                    speed--;
+                    cout << "Speed: " << speed << endl;
+                    window.setFramerateLimit(speed);
+                }
+                else if(event.key.code == sf::Keyboard::RBracket && speed < 60)
+                {
+                    speed++;
+                    cout << "Speed: " << speed << endl;
+                    window.setFramerateLimit(speed);
+                }
             }
-            else if(event.type == sf::Keyboard::RBracket)
-            {
-                speed++;
-                window.setFramerateLimit(speed);
-            }
+
             else if( event.type == sf::Event::MouseButtonPressed)
             {
-                int oldMousePosI = 0;
-                int oldMmousePosJ = 0;
-
                 sf::Vector2<int> mousePos = sf::Mouse::getPosition(window);
 
-                    int mousePosI = mousePos.y / SQUARE_RADIUS;
-                    int mousePosJ = mousePos.x / SQUARE_RADIUS;
+                int mousePosI = mousePos.y / SQUARE_RADIUS;
+                int mousePosJ = mousePos.x / SQUARE_RADIUS;
 
-                    if(field[mousePosI][mousePosJ] == 0) field[mousePosI][mousePosJ] = 1;
-                    else if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
+                if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
+                else field[mousePosI][mousePosJ] = 1;
 
-                    cout << mousePosI << "  " << mousePosJ << endl;
+                cout << mousePosI << "  " << mousePosJ << endl;
             }
         }
 
@@ -88,27 +91,6 @@ int main()
     return 0;
 }
 
-void clearField()
-{
-    for(int i = 0; i < quanHorElements; i++)
-    {
-        for(int j = 0; j < quanWertElements; j++)
-        {
-            field[i][j] = 0;
-        }
-    }
-}
-
-void newGenerate()
-{
-    for(int i = 0; i < quanHorElements; i++)
-    {
-        for(int j = 0; j < quanWertElements; j++)
-        {
-            field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
-        }
-    }
-}
 
 void initField()
 {
@@ -127,17 +109,6 @@ void initField()
         {
             field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
             oldField[i][j] = 0;
-        }
-    }
-}
-
-void swapField()
-{
-    for(int i = 0; i < quanHorElements; i++)
-    {
-        for(int j = 0; j < quanWertElements; j++)
-        {
-            oldField[i][j] = field[i][j];
         }
     }
 }
@@ -201,19 +172,48 @@ void newAge()
                 field[i][j] = 1;
                 colony++;
             }
-
             else if(oldField[i][j] == 1 && (points >= 2 && points <= 3))
             {
                 colony++;
                 continue;
             }
-            else
-            {
-                field[i][j] = 0;
-            }
+            else field[i][j] = 0;
         }
     }
-
     age++;
+}
+
+
+void swapField()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            oldField[i][j] = field[i][j];
+        }
+    }
+}
+
+void clearField()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            field[i][j] = 0;
+        }
+    }
+}
+
+void newGenerate()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        for(int j = 0; j < quanWertElements; j++)
+        {
+            field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
+        }
+    }
 }
 
