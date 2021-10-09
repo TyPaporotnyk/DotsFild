@@ -1,5 +1,5 @@
 # Game Life
-<img src="https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" width="auto" height="auto" />
+<img src="https://github.com/TyPaporotnyk/GameLife/blob/main/img/1.gif" width="auto" height="auto" />
 
 [@Daniil Svadkovsky](https://github.com/TyPaporotnyk)
 
