@@ -1,9 +1,7 @@
 # Game Life
-This program was created for testing skills and new programming language
+<img src="https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" width="auto" height="auto" />
 
 [@Daniil Svadkovsky](https://github.com/TyPaporotnyk)
-
-<img src="https://github.com/TyPaporotnyk/GameLife/blob/main/img/1.gif" width="633" height="426" />
 
 ## Control
 *To pause press "SPACE" <br/>
