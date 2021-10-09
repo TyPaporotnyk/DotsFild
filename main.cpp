@@ -7,7 +7,7 @@ using std::endl;
 #define WIDTH 1980
 #define HEIGHT 1280
 
-#define RANDOM_RANGE 4
+#define RANDOM_RANGE 5
 
 #define SQUARE_RADIUS 20
 
@@ -18,9 +18,10 @@ int quanHorElements;
 int quanWertElements;
 
 bool run = true;
+bool board = true;
 int age = 0;
 int colony = 0;
-int speed = 20;
+int speed = 10;
 
 void initField();
 void swapField();
@@ -51,6 +52,7 @@ int main()
                 if(event.key.code == sf::Keyboard::Space) run = !run;
                 else if(event.key.code == sf::Keyboard::N) newGenerate();
                 else if(event.key.code == sf::Keyboard::C) clearField();
+                else if(event.key.code == sf::Keyboard::B) board = !board;
                 else if(event.key.code == sf::Keyboard::LBracket && speed > 2)
                 {
                     speed--;
@@ -60,7 +62,7 @@ int main()
                 else if(event.key.code == sf::Keyboard::RBracket && speed < 60)
                 {
                     speed++;
-                    cout << "Speed: " << speed << endl;
+                    cout << "Speed: " << speed << "\\50" << endl;
                     window.setFramerateLimit(speed);
                 }
             }
@@ -116,9 +118,12 @@ void initField()
 void printField(sf::RenderWindow &window)
 {
     sf::RectangleShape square(sf::Vector2f(SQUARE_RADIUS, SQUARE_RADIUS));
+    if(board)
+    {
+        square.setOutlineColor(sf::Color::Black);
+        square.setOutlineThickness(1);
+    }
     square.setFillColor(sf::Color::White);
-    square.setOutlineColor(sf::Color::Black);
-    square.setOutlineThickness(1);
 
     for(int i = 0; i < quanHorElements; i++)
     {
@@ -149,7 +154,7 @@ void newAge()
             {
                 for(int dj = -1; dj <= 1; dj++)
                 {
-
+                    
                     int posI = 0;
                     int posJ = 0;
 
@@ -167,7 +172,7 @@ void newAge()
                 }
             }
 
-            if(oldField[i][j] == 0 && points == 3)
+            if(oldField[i][j] == 0 && (points == 3))
             {
                 field[i][j] = 1;
                 colony++;
@@ -214,6 +219,7 @@ void newGenerate()
         {
             field[i][j] = (rand() % RANDOM_RANGE + 1) == 1 ? 1 : 0;
         }
+
     }
 }
 
