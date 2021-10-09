@@ -3,7 +3,7 @@ This program was created for testing skills and new programming language
 
 [@Daniil Svadkovsky](https://github.com/TyPaporotnyk)
 
-<img src="https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" width="40" height="40" />
+<img src="https://github.com/TyPaporotnyk/GameLife/blob/main/img/1.gif" width="40" height="40" />
 
 ## Control
 *To pause press "SPACE" <br/>
