@@ -1,9 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 
 using std::cout;
 using std::endl;
 
+// settings
 #define WIDTH 1980
 #define HEIGHT 1280
 
@@ -26,6 +28,7 @@ int speed = 10;
 void initField();
 void swapField();
 void printField(sf::RenderWindow &window);
+void setCount(sf::RenderWindow &window);
 void newAge();
 void clearField();
 void newGenerate();
@@ -79,13 +82,16 @@ int main()
                 if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
                 else field[mousePosI][mousePosJ] = 1;
 
-                cout << mousePosI << "  " << mousePosJ << endl;
+                cout << "X: " << mousePosJ + 1 << " Y: " << mousePosI + 1 << endl;
             }
         }
 
         window.clear(sf::Color::White);
 
-        if(run) newAge();
+        if(run){
+            newAge();
+            setCount(window);
+        }
 
         printField(window);
 
@@ -148,7 +154,9 @@ void printField(sf::RenderWindow &window)
 // create new age and swap elements from field to oldField
 void newAge()
 {
+    colony = 0;
     swapField();
+
     for(int i = 0; i < quanHorElements; i++)
     {
         for(int j = 0; j < quanWertElements; j++)
@@ -188,7 +196,10 @@ void newAge()
                 colony++;
                 continue;
             }
-            else field[i][j] = 0;
+            else
+            {
+                field[i][j] = 0;
+            }
         }
     }
     age++;
@@ -208,6 +219,9 @@ void swapField()
 
 void clearField()
 {
+    age = 0;
+    colony = 0;
+
     for(int i = 0; i < quanHorElements; i++)
     {
         for(int j = 0; j < quanWertElements; j++)
@@ -219,6 +233,9 @@ void clearField()
 
 void newGenerate()
 {
+    age = 0;
+    colony = 0;
+
     for(int i = 0; i < quanHorElements; i++)
     {
         for(int j = 0; j < quanWertElements; j++)
@@ -227,5 +244,10 @@ void newGenerate()
         }
 
     }
+}
+
+void setCount(sf::RenderWindow &window)
+{
+    window.setTitle("Age: " + std::to_string(age) + ", Colony: " + std::to_string(colony));
 }
 
