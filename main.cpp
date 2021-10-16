@@ -46,6 +46,7 @@ int main()
         sf::Event event;
         while(window.pollEvent(event))
         {
+            // button click event
             if(event.type == sf::Event::Closed) window.close();
             else if(event.type == sf::Event::KeyPressed)
             {
@@ -67,6 +68,7 @@ int main()
                 }
             }
 
+            // mouse click event
             else if( event.type == sf::Event::MouseButtonPressed)
             {
                 sf::Vector2<int> mousePos = sf::Mouse::getPosition(window);
@@ -93,7 +95,7 @@ int main()
     return 0;
 }
 
-
+// creating two arrays and fill up them
 void initField()
 {
     quanWertElements = WIDTH / SQUARE_RADIUS;
@@ -115,6 +117,8 @@ void initField()
     }
 }
 
+// get each element of array and depending on the value
+// draw squares on the window
 void printField(sf::RenderWindow &window)
 {
     sf::RectangleShape square(sf::Vector2f(SQUARE_RADIUS, SQUARE_RADIUS));
@@ -141,6 +145,7 @@ void printField(sf::RenderWindow &window)
     }
 }
 
+// create new age and swap elements from field to oldField
 void newAge()
 {
     swapField();
@@ -150,11 +155,11 @@ void newAge()
         {
             int points = 0;
 
+            // looking for neighbor and increases value if true
             for(int di = -1; di <= 1; di++)
             {
                 for(int dj = -1; dj <= 1; dj++)
                 {
-                    
                     int posI = 0;
                     int posJ = 0;
 
@@ -172,6 +177,7 @@ void newAge()
                 }
             }
 
+            // rules
             if(oldField[i][j] == 0 && (points == 3))
             {
                 field[i][j] = 1;
