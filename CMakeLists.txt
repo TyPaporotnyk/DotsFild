@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-add_executable(Game_Life main.cpp)
+add_executable(Game_Life main.cpp GameLife.cpp GameLife.h)
 
 target_link_libraries(Game_Life sfml-graphics sfml-audio)
