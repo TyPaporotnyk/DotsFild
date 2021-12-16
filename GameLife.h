@@ -24,6 +24,8 @@ private:
     int speed = 10;
 
     void initField();
+    void deleteField();
+    void mouseClickEvent(const sf::Vector2<int> mousePos);
     void swapField();
     void printField(sf::RenderWindow &window);
     void setCount(sf::RenderWindow &window);

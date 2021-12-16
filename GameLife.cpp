@@ -15,7 +15,7 @@ GameLife::GameLife()
 
 GameLife::~GameLife()
 {
-
+    deleteField();
 }
 
 void GameLife::run()
@@ -50,18 +50,10 @@ void GameLife::run()
                 }
             }
 
-                // mouse click event
+            // mouse click event
             else if( event.type == sf::Event::MouseButtonPressed)
             {
-                sf::Vector2<int> mousePos = sf::Mouse::getPosition(window);
-
-                int mousePosI = mousePos.y / SQUARE_RADIUS;
-                int mousePosJ = mousePos.x / SQUARE_RADIUS;
-
-                if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
-                else field[mousePosI][mousePosJ] = 1;
-
-                cout << "X: " << mousePosJ + 1 << " Y: " << mousePosI + 1 << endl;
+                mouseClickEvent(sf::Mouse::getPosition(window));
             }
         }
 
@@ -96,6 +88,18 @@ void GameLife::initField()
             oldField[i][j] = 0;
         }
     }
+}
+
+void GameLife::deleteField()
+{
+    for(int i = 0; i < quanHorElements; i++)
+    {
+        delete[] field[i];
+        delete[] oldField[i];
+    }
+
+    delete[] field;
+    delete[] oldField;
 }
 
 // get each element of array and depending on the value
@@ -180,7 +184,6 @@ void GameLife::newAge()
     age++;
 }
 
-
 void GameLife::swapField()
 {
     for(int i = 0; i < quanHorElements; i++)
@@ -219,6 +222,17 @@ void GameLife::newGenerate()
         }
 
     }
+}
+
+void GameLife::mouseClickEvent(const sf::Vector2<int> mousePos)
+{
+    int mousePosI = mousePos.y / SQUARE_RADIUS;
+    int mousePosJ = mousePos.x / SQUARE_RADIUS;
+
+    if(field[mousePosI][mousePosJ] == 1) field[mousePosI][mousePosJ] = 0;
+    else field[mousePosI][mousePosJ] = 1;
+
+    cout << "X: " << mousePosJ + 1 << " Y: " << mousePosI + 1 << endl;
 }
 
 void GameLife::setCount(sf::RenderWindow &window)
